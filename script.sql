@@ -323,6 +323,23 @@ end nombrecliente;
 
 
 
+create table auditoria( 
+ usuario VARCHAR(20), 
+ fecha date,
+ v_viejo number, 
+ v_nuevo number
+);
+
+-----------------------------------
+
+
+create or replace trigger actualizar_registros_reserva 
+ after update  on Reserva for each row begin
+if updating then
+ insert into auditoria values(user,sysdate,:old.costo,:new.costo);
+end if;
+
+end; 
 
 
 
