@@ -5,6 +5,11 @@
 <struts>
     <!-- Configuration for the default package. -->
     <package name="default" extends="struts-default">
+       
+        <action name="registrar" class="Datos.GuardarCliente" method="guardar">
+            <result name="success">index.jsp</result>
+            <result name="error">index.jsp</result>            
+        </action> 
         
     </package>
 </struts>

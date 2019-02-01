@@ -1,3 +1,4 @@
+connect system/oracle1;
 
 drop user admin_vehiculos cascade;
 drop user adm_vehiculos cascade;
@@ -24,7 +25,7 @@ identified by advehiculos;
 grant connect to admin_vehiculos; 
 grant resource to admin_vehiculos;
 
-connect admin_vehiculos;
+connect admin_vehiculos/adminvehiculos;
 
 CREATE TABLE Cliente
 (
@@ -35,7 +36,7 @@ Edad number NULL,
 Sexo varchar(15) NOT NULL , 
 Email varchar(40) NULL
 );
-
+/
 
 
 CREATE TABLE Vehiculo
@@ -142,16 +143,16 @@ insert into Agencia values(010,'Autos Bambu','Oriente','Morona');
 
 -- Registros de la tabla Fabricación
 
-insert into Fabricacion values(001,001,'02/01/2015','Ecuador','Nissan'); 
-insert into Fabricacion values(002,002,'08/01/2015','Mexico','Chevrolet'); 
-insert into Fabricacion values(003,003,'15/05/2015','El Salvador','BMW'); 
-insert into Fabricacion values(004,004,'18/06/2015','Brasil','Mercedes'); 
-insert into Fabricacion values(005,005,'20/07/2015','Portugal','Isuzu'); 
-insert into Fabricacion values(006,006,'25/08/2015','Brasil','Kia');
-insert into Fabricacion values(007,007,'04/09/2015','Colombia','Mazda'); 
-insert into Fabricacion values(008,008,'10/10/2015','Chile','Toyota'); 
-insert into Fabricacion values(009,009,'18/11/2015','Canada','Scoda');
-insert into Fabricacion values(010,010,'20/12/2015','Alemania','Wolfswagen');
+insert into Fabricacion values(001,001,'2015','Ecuador','Nissan'); 
+insert into Fabricacion values(002,002,'2015','Mexico','Chevrolet'); 
+insert into Fabricacion values(003,003,'2015','El Salvador','BMW'); 
+insert into Fabricacion values(004,004,'2015','Brasil','Mercedes'); 
+insert into Fabricacion values(005,005,'2015','Portugal','Isuzu'); 
+insert into Fabricacion values(006,006,'2015','Brasil','Kia');
+insert into Fabricacion values(007,007,'2015','Colombia','Mazda'); 
+insert into Fabricacion values(008,008,'2015','Chile','Toyota'); 
+insert into Fabricacion values(009,009,'2015','Canada','Scoda');
+insert into Fabricacion values(010,010,'2015','Alemania','Wolfswagen');
 
 
 
@@ -170,59 +171,64 @@ insert into Reserva values(010,'20/12/2015','31/12/2015',010,010,010,47);
 
 
 
+
 Set serveroutput on
 
-Create or replace procedure crear_cliente(
- cp_oracle_id in number,
+Create or replace procedure crear_cliente( 
  jt_oracle_n in varchar2,
  dc_oracle_cd in VARCHAR2,
  vm_oracle_ed in number,
  cp_oracle_sexo in VARCHAR2, 
  jt_oracle_email in VARCHAR2)
 is
- total number; 
- Begin total:=0;
- select max(idcliente) into total 
- from cliente 
- where idcliente=cp_oracle_id;
+ cp_oracle_id number; 
+ Begin 
+ select max(idcliente)+1 into cp_oracle_id 
+ from cliente; 
+  if cp_oracle_id is null then   
+   cp_oracle_id:=1;
+  end if;
   Insert INTO cliente 
   values(cp_oracle_id,jt_oracle_n,dc_oracle_cd, vm_oracle_ed,cp_oracle_sexo, jt_oracle_email);
 END;
 /
+show errors procedure crear_cliente;
+
 ------------------------------------
 
-Create or replace procedure crear_agencia(
- cp_oracle_id in number,
+Create or replace procedure crear_agencia( 
  jt_oracle_n in varchar2,
  dc_oracle_rg in VARCHAR2,
  vm_oracle_cd in VARCHAR2)
 is
- total number; 
- Begin total:=0;
-  select max(idagencia) into total 
-  from agencia 
-  where idagencia=cp_oracle_id; 
-  Insert INTO agencia 
-  values(cp_oracle_id,jt_oracle_n,dc_oracle_rg,vm_oracle_cd); 
+ cp_oracle_id number; 
+ Begin  
+  select max(idagencia) into cp_oracle_id 
+  from agencia;
+  if cp_oracle_id is null then   
+   cp_oracle_id:=1;
+  end if;  
+   Insert INTO agencia 
+   values(cp_oracle_id,jt_oracle_n,dc_oracle_rg,vm_oracle_cd);  
 END;
 /
 -----------------------------------------
 
-Create or replace procedure crear_vehiculo(
- cp_oracle_id in number,
+Create or replace procedure crear_vehiculo(  
  jt_oracle_pl in number,
  dc_oracle_cl in number,
  vm_oracle_p in number,
  cp_oracle_cr in VARCHAR2)
 is
- total number; 
- Begin total:=0;
- select count(*) into total 
- from vehiculo 
- where idvehiculo=cp_oracle_id;
- Insert INTO vehiculo 
- values(cp_oracle_id,jt_oracle_pl,dc_oracle_cl,vm_oracle_p,cp_oracle_cr);
- end if; 
+ cp_oracle_id number; 
+ Begin  
+ select max(IdVehiculo) into cp_oracle_id 
+ from vehiculo;
+ if cp_oracle_id is null then   
+   cp_oracle_id:=1;
+ end if;
+  Insert INTO vehiculo 
+  values(cp_oracle_id,jt_oracle_pl,dc_oracle_cl,vm_oracle_p,cp_oracle_cr); 
 END;
 /
 
@@ -340,7 +346,7 @@ if updating then
 end if;
 
 end; 
-
+/
 
 
 
