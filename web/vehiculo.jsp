@@ -3,6 +3,8 @@
     Created on : 30-sep-2018, 20:55:10
     Author     : 
 --%>
+<%@page import="Entidades.Vehiculo"%>
+<%@page import="Datos.GuardarVehiculo"%>
 <%@page import="Entidades.Cliente"%>
 <%@page import="com.sun.security.ntlm.Client"%>
 <%@page import="java.util.List"%>
@@ -15,7 +17,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
-        <title>Registro de Cliente</title>
+        <title>Registro de Vehiculo</title>
     </head>
     <body>
 
@@ -29,7 +31,7 @@
                 <div class="container col-md-12">
                     <div class="col-md-9 col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><h3 class="  text-warning">Registro de nuevo cliente</h3></div>
+                            <div class="panel-heading"><h3 class="  text-warning">Registro de nuevo Vehículo</h3></div>
                             <div class="panel-body" style="min-height: 600px; max-height: 750px;overflow-y: scroll;">
                                 <s:if test="dc_consumo_mensaje!=null">
                                     <div class="alert <s:property value="style"/> alert-dismissible">
@@ -37,7 +39,7 @@
                                         <strong>¡<s:property value="estado"/>!</strong> <s:property value="dc_consumo_mensaje"/>.
                                     </div>
                                 </s:if>                                
-                                <form action="registrar" class="form-horizontal" method="post" id="formulario">
+                                <form action="add_vehiculo" class="form-horizontal" method="post" id="formulario">
 
 
 
@@ -45,45 +47,42 @@
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4" for="nombre">Nombre *</label>
+                                        <label class="control-label col-sm-4" for="nombre">Placa *</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control required" name="nombres" maxlength="35" placeholder="Nombres"/>
+                                            <input type="text" class="form-control required" name="placa" maxlength="8" placeholder="Placa"/>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4" for="ciudad">Ciudad *</label>
+                                        <label class="control-label col-sm-4" for="ciudad">Cilindraje *</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control required" name="ciudad" maxlength="35" placeholder="Ciudad"/>
+                                            <input type="text" class="form-control required" name="cilindraje"  placeholder="Cilindraje"/>
                                         </div>
                                     </div>
 
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4" for="Edad">Edad *</label>
+                                        <label class="control-label col-sm-4" for="Edad">Precio *</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control required" name="edad" placeholder="Edad"/>
+                                            <input type="text" class="form-control required" name="precio" placeholder="Precio"/>
                                         </div>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4" for="sexo">Sexo *</label>
+                                        <label class="control-label col-sm-4" for="color">Color *</label>
                                         <div class="col-sm-5">
-                                            <select class="form-control" name="sexo">
-                                                <option value="Femenino">Femenino</option>
-                                                <option value="Masculino">Masculino</option>
+                                            <select class="form-control" name="color">
+                                                <option value="Dorado">Dorado</option>
+                                                <option value="Rojo">Rojo</option>
+                                                <option value="Azul">Azul</option>
+                                                <option value="Negro">Negro</option>
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-4" for="direccion">Email *</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control required" name="email" maxlength="100" placeholder="Email"/>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="form-group col-sm-4 pull-right"  >
                                         <input type="submit" class=" btn btn-info " value="Registrar" id="boton"/> <br>
                                         <small>(*) Campos Obligatiorios</small> <br>
@@ -92,50 +91,45 @@
 
                                 <br><br><br>
                                 <h1>
-                                 Lista de clientes    
+                                 Lista de Vehículos    
                                 </h1>
                                 <div class="table-responsive">
                                     <table class="table table-hover table-responsive table-bordered">
                                         <thead>
                                         <th>Codigo</th>
-                                        <th>Nombres</th>
-                                        <th>Ciudad</th>
-                                        <th>Edad</th>
-                                        <th>Sexo</th>
-                                        <th>Email</th>             
-
+                                        <th>Placa</th>
+                                        <th>Cilindraje</th>
+                                        <th>Precio</th>
+                                        <th>Color</th>
                                         </thead>
                                         <tbody id="tbody">
                                             <%
-                                                GuardarCliente gu = new GuardarCliente();
+                                                GuardarVehiculo gu = new GuardarVehiculo();
                                                 gu.obteLista();
-                                                List<Cliente> lista = gu.getDc_consumo_lista();
+                                                List<Vehiculo> lista = gu.getDc_consumo_lista();
                                                 for (int idx = 0; idx < lista.size(); idx++) {
-                                                    Cliente elem = lista.get(idx);
+                                                    Vehiculo elem = lista.get(idx);
                                                     out.println("<tr>");
                                                     out.println("<td>");
-                                                    out.println(elem.getIdCliente());
+                                                    out.println(elem.getIdVehiculo());
                                                     out.println("</td>");
                                                     
                                                     out.println("<td>");
-                                                    out.println(elem.getNombres());
+                                                    out.println(elem.getPlaca());
                                                     out.println("</td>");
                                                     
                                                     out.println("<td>");
-                                                    out.println(elem.getCiudad());
+                                                    out.println(elem.getCilindraje());
                                                     out.println("</td>");
                                                     
                                                     out.println("<td>");
-                                                    out.println(elem.getEdad());
+                                                    out.println(elem.getPrecio());
                                                     out.println("</td>");
                                                     
                                                     out.println("<td>");
-                                                    out.println(elem.getSexo());
-                                                    out.println("</td>");
-                                                    
-                                                    out.println("<td>");
-                                                    out.println(elem.getEmail());
-                                                    out.println("</td>");                                                   
+                                                    out.println(elem.getColor());
+                                                    out.println("</td>");                                               
+                                                                                                
                                                     
                                                     out.println("</tr>");
                                                 }

@@ -11,5 +11,28 @@
             <result name="error">index.jsp</result>            
         </action> 
         
+        <action name="add_vehiculo" class="Datos.GuardarVehiculo" method="guardar">
+            <result name="success">vehiculo.jsp</result>
+            <result name="error">vehiculo.jsp</result>            
+        </action> 
+        <action name="add_agencia" class="Datos.GuardarAgencia" method="guardar">
+            <result name="success">agencia.jsp</result>
+            <result name="error">agencia.jsp</result>            
+        </action> 
+        <action name="ver_reserva" class="Datos.ConsultarReservas" method="obteLista">
+            <result name="success">ver_reservas.jsp</result>
+            <result name="error">ver_reservas.jsp</result>            
+        </action> 
+        
+        <action name="v_reservas" class="Datos.ConsultarReservas" method="obteLista">
+            <result name="success">actualizar.jsp</result>
+            <result name="error">actualizar.jsp</result>            
+        </action> 
+        
+        <action name="editar" class="Datos.ConsultarReservas" method="obteLista">
+            <result name="success">actualizar.jsp</result>
+            <result name="error">actualizar.jsp</result>            
+        </action> 
+        
     </package>
 </struts>

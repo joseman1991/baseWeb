@@ -36,13 +36,17 @@ Edad number NULL,
 Sexo varchar(15) NOT NULL , 
 Email varchar(40) NULL
 );
-/
 
+
+---------------------------
+
+
+------------------------
 
 CREATE TABLE Vehiculo
 (
  IdVehiculo number NOT NULL PRIMARY KEY, 
- Placa number NOT NULL,
+ Placa varchar(8) NOT NULL,
  Cilindraje number NOT NULL, 
  Precio number NOT NULL, 
  Color varchar(15) NULL
@@ -118,16 +122,16 @@ Almeida','Jujan',34,'Masculino','pedro1324@gmail.com');
 
 --Registros de la Tabla Vehículo
 
-insert into Vehiculo values(001,0111,19771,10.000,'Celeste'); 
-insert into Vehiculo values(002,0112,19992,12.000,'Fucsia'); 
-insert into Vehiculo values(003,0113,19983,13.000,'Amarillo'); 
-insert into Vehiculo values(004,0114,20014,14.000,'Morado'); 
-insert into Vehiculo values(005,0115,19755,15.000,'Plomo'); 
-insert into Vehiculo values(006,0116,19796,11.000,'Azul'); 
-insert into Vehiculo values(007,0117,19807,18.000,'Rojo'); 
-insert into Vehiculo values(008,0118,19888,20.000,'Blanco'); 
-insert into Vehiculo values(009,0119,19879,30.000,'Negro'); 
-insert into Vehiculo values(010,0110,199610,25.000,'Verde'); 
+insert into Vehiculo values(001,'0111',19771,10.000,'Celeste'); 
+insert into Vehiculo values(002,'0112',19992,12.000,'Fucsia'); 
+insert into Vehiculo values(003,'0113',19983,13.000,'Amarillo'); 
+insert into Vehiculo values(004,'0114',20014,14.000,'Morado'); 
+insert into Vehiculo values(005,'0115',19755,15.000,'Plomo'); 
+insert into Vehiculo values(006,'0116',19796,11.000,'Azul'); 
+insert into Vehiculo values(007,'0117',19807,18.000,'Rojo'); 
+insert into Vehiculo values(008,'0118',19888,20.000,'Blanco'); 
+insert into Vehiculo values(009,'0119',19879,30.000,'Negro'); 
+insert into Vehiculo values(010,'0110',199610,25.000,'Verde'); 
 
 -- Registros de la tabla Agencia
 insert into Agencia values(001,'MotorSport','Costa','Esmeraldas'); 
@@ -203,7 +207,7 @@ Create or replace procedure crear_agencia(
 is
  cp_oracle_id number; 
  Begin  
-  select max(idagencia) into cp_oracle_id 
+  select max(idagencia)+1 into cp_oracle_id 
   from agencia;
   if cp_oracle_id is null then   
    cp_oracle_id:=1;
@@ -212,17 +216,21 @@ is
    values(cp_oracle_id,jt_oracle_n,dc_oracle_rg,vm_oracle_cd);  
 END;
 /
+
+
+
+
 -----------------------------------------
 
 Create or replace procedure crear_vehiculo(  
- jt_oracle_pl in number,
+ jt_oracle_pl in varchar,
  dc_oracle_cl in number,
  vm_oracle_p in number,
  cp_oracle_cr in VARCHAR2)
 is
  cp_oracle_id number; 
  Begin  
- select max(IdVehiculo) into cp_oracle_id 
+ select max(IdVehiculo)+1 into cp_oracle_id 
  from vehiculo;
  if cp_oracle_id is null then   
    cp_oracle_id:=1;
@@ -232,6 +240,18 @@ is
 END;
 /
 
+-------------------------------------------
+create or replace procedure ver_reservas(dc_oracle_placa vehiculo.placa%type,dc_oracle_cursor out sys_refcursor)
+is
+begin
+  open dc_oracle_cursor for select  v.Placa,  c.Nombres,r.costo, c.sexo, r.Fecha_Inicio, r.Fecha_Final
+  from reserva r inner join vehiculo v on v.idvehiculo=r.idvehiculo
+  inner join cliente c on c.idcliente=r.idcliente
+  where v.placa like dc_oracle_placa||'%';
+end;
+/
+
+show errors procedure ver_reservas;
 -------------------------------------------
 
 
@@ -331,7 +351,7 @@ end nombrecliente;
 
 create table auditoria( 
  usuario VARCHAR(20), 
- fecha date,
+ fecha timestamp default sysdate,
  v_viejo number, 
  v_nuevo number
 );
@@ -342,12 +362,19 @@ create table auditoria(
 create or replace trigger actualizar_registros_reserva 
  after update  on Reserva for each row begin
 if updating then
- insert into auditoria values(user,sysdate,:old.costo,:new.costo);
+ insert into auditoria values(user,default,:old.costo,:new.costo);
 end if;
-
 end; 
 /
 
 
+show errors trigger actualizar_registros_reserva;
 
-
+create or replace procedure ver_auditoria(dc_oracle_cursor out sys_refcursor)
+is
+begin
+  open dc_oracle_cursor for select *
+  from auditoria;
+end;
+/
+show errors procedure ver_auditoria;

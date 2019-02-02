@@ -7,6 +7,7 @@ package Datos;
 
 import Conexion.ConexionOSQL;
 import Entidades.Cliente;
+import Entidades.Vehiculo;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import java.sql.CallableStatement;
@@ -21,19 +22,19 @@ import java.util.List;
  *
  * @author JOSE
  */
-public class GuardarCliente extends ActionSupport implements ModelDriven<Cliente> {
+public class GuardarVehiculo extends ActionSupport implements ModelDriven<Vehiculo> {
 
-    private Cliente dc_Consumo_Cliente;
+    private Vehiculo dc_Consumo_Vehiculo;
     private final ConexionOSQL dc_COnsumo_Con;
     private Connection dc_Consumo_conexion;
     private String dc_consumo_mensaje;
     private String estado;
     private String style;
-    private final List<Cliente> dc_consumo_lista;
+    private final List<Vehiculo> dc_consumo_lista;
 
-    public GuardarCliente() {
+    public GuardarVehiculo() {
         dc_COnsumo_Con = new ConexionOSQL();
-        dc_Consumo_Cliente = new Cliente();
+        dc_Consumo_Vehiculo = new Vehiculo();
         dc_consumo_lista = new ArrayList<>();
     }
 
@@ -42,20 +43,19 @@ public class GuardarCliente extends ActionSupport implements ModelDriven<Cliente
             dc_COnsumo_Con.abrirConexion();
             dc_Consumo_conexion = dc_COnsumo_Con.dc_Consumo_Conexion;
 
-            CallableStatement dc_Consumo_procedure = dc_Consumo_conexion.prepareCall("{call crear_cliente(?,?,?,?,?)}");
-            dc_Consumo_procedure.setString(1, dc_Consumo_Cliente.getNombres());
-            dc_Consumo_procedure.setString(2, dc_Consumo_Cliente.getCiudad());
-            dc_Consumo_procedure.setInt(3, dc_Consumo_Cliente.getEdad());
-            dc_Consumo_procedure.setString(4, dc_Consumo_Cliente.getSexo());
-            dc_Consumo_procedure.setString(5, dc_Consumo_Cliente.getEmail());
+            CallableStatement dc_Consumo_procedure = dc_Consumo_conexion.prepareCall("{call crear_vehiculo(?,?,?,?)}");
+            dc_Consumo_procedure.setString(1, dc_Consumo_Vehiculo.getPlaca());
+            dc_Consumo_procedure.setInt(2, dc_Consumo_Vehiculo.getCilindraje());
+            dc_Consumo_procedure.setFloat(3, dc_Consumo_Vehiculo.getPrecio());
+            dc_Consumo_procedure.setString(4, dc_Consumo_Vehiculo.getColor());
             dc_Consumo_procedure.executeUpdate();
-            dc_consumo_mensaje = "Datos de cliente insertados";
+            dc_consumo_mensaje = "Datos de vehículo insertados";
             style = "alert-success";
             estado = "Éxito";
             return SUCCESS;
         } catch (SQLException e) {
             dc_consumo_mensaje = e.getMessage();
-            style = "alert-danfer";
+            style = "alert-danger";
             estado = "Error";
             return ERROR;
         } finally {
@@ -74,18 +74,17 @@ public class GuardarCliente extends ActionSupport implements ModelDriven<Cliente
             dc_COnsumo_Con.abrirConexion();
             dc_Consumo_conexion = dc_COnsumo_Con.dc_Consumo_Conexion;
             dc_consumo_lista.clear();
-            PreparedStatement dc_Consumo_COnsulta = dc_Consumo_conexion.prepareStatement("select * from cliente order by idcliente desc");
+            PreparedStatement dc_Consumo_COnsulta = dc_Consumo_conexion.prepareStatement("select * from vehiculo order by idvehiculo desc");
             ResultSet dc_Consumo_datos=dc_Consumo_COnsulta.executeQuery();
             
             while (dc_Consumo_datos.next()) {                
-                Cliente dc_consumo_c= new Cliente();  
-                dc_consumo_c.setIdCliente(dc_Consumo_datos.getInt(1));
-                dc_consumo_c.setNombres(dc_Consumo_datos.getString(2));
-                dc_consumo_c.setCiudad(dc_Consumo_datos.getString(3));
-                dc_consumo_c.setEdad(dc_Consumo_datos.getInt(4));
-                dc_consumo_c.setSexo(dc_Consumo_datos.getString(5));
-                dc_consumo_c.setEmail(dc_Consumo_datos.getString(6));
-                dc_consumo_lista.add(dc_consumo_c);
+                Vehiculo dc_consumo_v= new Vehiculo();  
+                dc_consumo_v.setIdVehiculo(dc_Consumo_datos.getInt(1));
+                dc_consumo_v.setPlaca(dc_Consumo_datos.getString(2));
+                dc_consumo_v.setCilindraje(dc_Consumo_datos.getInt(3));
+                dc_consumo_v.setPrecio(dc_Consumo_datos.getFloat(4));
+                dc_consumo_v.setColor(dc_Consumo_datos.getString(5));
+                dc_consumo_lista.add(dc_consumo_v);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -101,20 +100,20 @@ public class GuardarCliente extends ActionSupport implements ModelDriven<Cliente
     }
 
     @Override
-    public Cliente getModel() {
-        return dc_Consumo_Cliente;
+    public Vehiculo getModel() {
+        return dc_Consumo_Vehiculo;
     }
 
-    public List<Cliente> getDc_consumo_lista() {
+    public List<Vehiculo> getDc_consumo_lista() {
         return dc_consumo_lista;
     }
 
-    public Cliente getDc_Consumo_Cliente() {
-        return dc_Consumo_Cliente;
+    public Vehiculo getDc_Consumo_Vehiculo() {
+        return dc_Consumo_Vehiculo;
     }
 
-    public void setDc_Consumo_Cliente(Cliente dc_Consumo_Cliente) {
-        this.dc_Consumo_Cliente = dc_Consumo_Cliente;
+    public void setDc_Consumo_Vehiculo(Vehiculo dc_Consumo_Vehiculo) {
+        this.dc_Consumo_Vehiculo = dc_Consumo_Vehiculo;
     }
 
     public String getDc_consumo_mensaje() {
