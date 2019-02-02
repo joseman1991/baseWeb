@@ -214,8 +214,7 @@ public class ConsultarReservas extends ActionSupport implements ModelDriven<Rese
 
     public List<Auditoria> getDc_consumo_listas() {
         return dc_consumo_listas;
-    }
-    
+    } 
     
     
 
