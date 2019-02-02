@@ -64,10 +64,42 @@
                                                         <td><s:property value="fechainicio"/></td>
                                                         <td><s:property value="fechafin"/></td>   
                                                         <td>
-                                                               <s:url action="editar" var="actualizar"/>
-                                                            <s:a cssClass="btn btn-warning" data-toggle="tooltip" title="Editar usuario" href="%{actualiza}"> 
+                                                            <s:url action="editar" var="actualizar">
+                                                                <s:param name="idreserva">
+                                                                    <s:property value="idreserva"/>                                                                    
+                                                                </s:param>
+                                                            </s:url>
+                                                            <s:a href="%{actualizar}" cssClass="btn btn-warning" data-toggle="tooltip" title="Editar costo"> 
                                                             <span class="glyphicon glyphicon-edit"></span>
                                                         </s:a></td>   
+                                                    </tr>
+                                                </s:iterator>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <h1>Auditoría</h1>
+                                    <div class="table-responsive">
+
+                                        <table class="table table-hover table-responsive table-bordered">
+                                            <thead>
+                                            <th>Usuario</th>
+                                            <th>Fecha</th>
+                                            <th>Hora</th>
+                                            <th>Valor viejo</th>
+                                            <th>Valor nuevo</th>
+                                            <th>Fecha Fin</th>                                            
+
+                                            </thead>
+                                            <tbody id="tbody">
+                                                <s:iterator value="dc_consumo_listaA">
+                                                    <tr>
+                                                        <td><s:property value="usuario"/></td>
+                                                        <td><s:property value="Fecha"/></td>
+                                                        <td><s:property value="Hora"/></td>
+                                                        <td><s:property value="v_viejo"/></td>
+                                                        <td><s:property value="v_nuevo"/></td>
+                                                      
                                                     </tr>
                                                 </s:iterator>
                                             </tbody>

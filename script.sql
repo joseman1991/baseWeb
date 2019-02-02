@@ -244,7 +244,7 @@ END;
 create or replace procedure ver_reservas(dc_oracle_placa vehiculo.placa%type,dc_oracle_cursor out sys_refcursor)
 is
 begin
-  open dc_oracle_cursor for select  v.Placa,  c.Nombres,r.costo, c.sexo, r.Fecha_Inicio, r.Fecha_Final
+  open dc_oracle_cursor for select r.idreserva,  v.Placa,  c.Nombres,r.costo, c.sexo, r.Fecha_Inicio, r.Fecha_Final
   from reserva r inner join vehiculo v on v.idvehiculo=r.idvehiculo
   inner join cliente c on c.idcliente=r.idcliente
   where v.placa like dc_oracle_placa||'%';
@@ -373,7 +373,7 @@ show errors trigger actualizar_registros_reserva;
 create or replace procedure ver_auditoria(dc_oracle_cursor out sys_refcursor)
 is
 begin
-  open dc_oracle_cursor for select *
+  open dc_oracle_cursor for select usuario, to_char(fecha,'dd/MM/yyyy'),to_char(fecha,'hh:mm:ss'), v_viejo,v_nuevo
   from auditoria;
 end;
 /

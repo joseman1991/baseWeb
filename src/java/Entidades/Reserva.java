@@ -8,6 +8,7 @@ package Entidades;
 
 public class Reserva {
     
+    private int Idreserva; 
     private String placa;
     
     private String costro;
@@ -62,6 +63,14 @@ public class Reserva {
 
     public void setFechafin(String fechafin) {
         this.fechafin = fechafin;
+    }
+
+    public int getIdreserva() {
+        return Idreserva;
+    }
+
+    public void setIdreserva(int Idreserva) {
+        this.Idreserva = Idreserva;
     }
     
     
