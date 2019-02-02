@@ -25,7 +25,7 @@
                 <div class="container col-md-12">
                     <div class="col-md-9 col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><h3 class="  text-warning">Ver reservas <s:property value="idreserva"/></h3></div>
+                            <div class="panel-heading"><h3 class="  text-warning">Ver reservas</h3></div>
                             <div class="panel-body" style="min-height: 600px; max-height: 750px;overflow-y: scroll;">
                                 <s:if test="dc_consumo_mensaje!=null">
                                     <div class="alert <s:property value="style"/> alert-dismissible">
@@ -33,7 +33,7 @@
                                         <strong>¡<s:property value="estado"/>!</strong> <s:property value="dc_consumo_mensaje"/>.
                                     </div>
                                 </s:if>                                
-                                <form action="ver_reserva" class="form-horizontal" method="post" id="formulario">
+                                <form action="actualizado" class="form-horizontal" method="post" id="formulario">
 
 
 
@@ -43,7 +43,8 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4" for="Ingresa la placa">Actualiza Costo *</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control required" value="<s:property value="costro"/>" name="costo" maxlength="35" placeholder="Ingresa la placa"/> 
+                                            <input type="text" class="form-control required" value="<s:property value="costro"/>" name="costro" maxlength="35" placeholder="Ingresa la placa"/> 
+                                            <input type="hidden" name="idreserva" value="<s:property value="idreserva"/>"/>
                                             <br> <input type="submit" class=" btn btn-info " value="Actualizar" id="boton"/> 
                                         </div>
                                     </div>

@@ -41,17 +41,50 @@
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4" for="Ingresa el precio">Ingresa la Placa *</label>
+                                        <label class="control-label col-sm-4" for="Ingresa la placa">Ingresa la Placa *</label>
                                         <div class="col-sm-5">
                                             <input type="text" class="form-control required" name="placa" maxlength="35" placeholder="Ingresa la placa"/> 
-                                            <br> <input type="submit" class=" btn btn-info " value="Actualizar" id="boton"/> 
+                                            <br> <input type="submit" class=" btn btn-info " value="Buscar" id="boton"/> 
                                         </div>
                                     </div>
 
                                 </form>
 
-                           
-                           
+                                <br><br><br>
+                                <s:if test="dc_consumo_lista!=null" >
+
+
+                                    <h1>
+                                        Reservas    
+                                    </h1>
+                                    <div class="table-responsive">
+
+                                        <table class="table table-hover table-responsive table-bordered">
+                                            <thead>
+                                            <th>Placa</th>
+                                            <th>Nombres</th>
+                                            <th>Costo</th>
+                                            <th>Sexo</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha Fin</th>
+
+                                            </thead>
+                                            <tbody id="tbody">
+                                                <s:iterator value="dc_consumo_lista">
+                                                    <tr>
+                                                        <td><s:property value="placa"/></td>
+                                                        <td><s:property value="costro"/></td>
+                                                        <td><s:property value="nombres"/></td>
+                                                        <td><s:property value="sexo"/></td>
+                                                        <td><s:property value="fechainicio"/></td>
+                                                        <td><s:property value="fechafin"/></td>   
+                                                    </tr>
+                                                </s:iterator>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </s:if>       
 
                             </div>
                         </div>

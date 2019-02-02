@@ -15,7 +15,7 @@ public class Reserva {
     private String nombres;
     private String sexo;
     private String fechainicio;
-    private String fechafin;
+    private String fechafin; 
 
     public String getPlaca() {
         return placa;

@@ -88,18 +88,15 @@
                                             <th>Hora</th>
                                             <th>Valor viejo</th>
                                             <th>Valor nuevo</th>
-                                            <th>Fecha Fin</th>                                            
-
                                             </thead>
                                             <tbody id="tbody">
-                                                <s:iterator value="dc_consumo_listaA">
+                                                <s:iterator value="dc_consumo_listas">
                                                     <tr>
                                                         <td><s:property value="usuario"/></td>
-                                                        <td><s:property value="Fecha"/></td>
-                                                        <td><s:property value="Hora"/></td>
+                                                        <td><s:property value="fecha"/></td>
+                                                        <td><s:property value="hora"/></td>
                                                         <td><s:property value="v_viejo"/></td>
-                                                        <td><s:property value="v_nuevo"/></td>
-                                                      
+                                                        <td><s:property value="v_nuevo"/></td>                                                      
                                                     </tr>
                                                 </s:iterator>
                                             </tbody>

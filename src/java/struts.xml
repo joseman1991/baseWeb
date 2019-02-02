@@ -29,6 +29,11 @@
             <result name="error">actualizar.jsp</result>            
         </action> 
         
+        <action name="actualizado" class="Datos.ConsultarReservas" method="actualizarReserva">
+            <result name="success">actualizar.jsp</result>
+            <result name="error">actualizar.jsp</result>            
+        </action> 
+        
         <action name="editar" class="Datos.ConsultarReservas" method="obternReserva">
             <result name="success">edita.jsp</result>
             <result name="error">edita.jsp</result>            

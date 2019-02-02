@@ -32,12 +32,12 @@ public class ConsultarReservas extends ActionSupport implements ModelDriven<Rese
     private String estado;
     private String style;
     private final List<Reserva> dc_consumo_lista;
-    private final List<Auditoria> dc_consumo_listaA;
+    private final List<Auditoria> dc_consumo_listas;
 
     public ConsultarReservas() {
         dc_COnsumo_Con = new ConexionOSQL();
         dc_consumo_lista = new ArrayList<>();
-        dc_consumo_listaA = new ArrayList<>();
+        dc_consumo_listas = new ArrayList<>();
         dc_Consumo_Reserva = new Reserva();
     }
 
@@ -50,6 +50,7 @@ public class ConsultarReservas extends ActionSupport implements ModelDriven<Rese
             if (dc_Consumo_Reserva.getPlaca() == null) {
                 dc_Consumo_Reserva.setPlaca("");
             }
+            System.out.println("paca "+dc_Consumo_Reserva.getPlaca());
             dc_Consumo_procedure.setString(1, dc_Consumo_Reserva.getPlaca());
             dc_Consumo_procedure.registerOutParameter(2, OracleTypes.CURSOR);
             dc_Consumo_procedure.executeUpdate();
@@ -66,7 +67,7 @@ public class ConsultarReservas extends ActionSupport implements ModelDriven<Rese
                 dc_consumo_r.setFechafin(dc_Consumo_datos.getString(7));
                 dc_consumo_lista.add(dc_consumo_r);
             }
-            obtenerLIsta();
+            obtenerLista();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -105,25 +106,57 @@ public class ConsultarReservas extends ActionSupport implements ModelDriven<Rese
         return SUCCESS;
     }
 
-    private void obtenerLIsta() {
+    public String actualizarReserva() {
         try {
             dc_COnsumo_Con.abrirConexion();
             dc_Consumo_conexion = dc_COnsumo_Con.dc_Consumo_Conexion;
-            dc_consumo_listaA.clear();
+            PreparedStatement dc_Consumo_consulta = dc_Consumo_conexion.prepareStatement("update reserva set costo=? where idreserva=?");
+
+            dc_Consumo_consulta.setString(1, dc_Consumo_Reserva.getCostro());
+            dc_Consumo_consulta.setInt(2, dc_Consumo_Reserva.getIdreserva());
+            int rs = dc_Consumo_consulta.executeUpdate();
+            style = "alert-success";
+            estado = "Correcto";
+            if (rs > 0) {
+                dc_consumo_mensaje = "Costo actualizado";                
+                obteLista();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            dc_consumo_mensaje = e.getMessage();
+
+        } finally {
+            try {
+                if (dc_Consumo_conexion != null) {
+                    dc_Consumo_conexion.close();
+                }
+            } catch (SQLException e) {
+                dc_consumo_mensaje = e.getMessage();
+            }
+        }
+        obtenerLista();
+        return SUCCESS;
+    }
+
+    private void obtenerLista() {
+        try {       
+              dc_COnsumo_Con.abrirConexion();
+            dc_Consumo_conexion = dc_COnsumo_Con.dc_Consumo_Conexion;
+            dc_consumo_listas.clear();
             CallableStatement dc_Consumo_procedure = dc_Consumo_conexion.prepareCall("{call ver_auditoria(?)}");
 
             dc_Consumo_procedure.registerOutParameter(1, OracleTypes.CURSOR);
             dc_Consumo_procedure.executeUpdate();
             ResultSet dc_Consumo_datos = (ResultSet) dc_Consumo_procedure.getObject(1);
-
-            while (dc_Consumo_datos.next()) {
+           
+            while (dc_Consumo_datos.next()) {               
                 Auditoria dc_consumo_r = new Auditoria();
                 dc_consumo_r.setUsuario(dc_Consumo_datos.getString(1));
                 dc_consumo_r.setFecha(dc_Consumo_datos.getString(2));
-                dc_consumo_r.setHora(dc_Consumo_datos.getString(3));
-                dc_consumo_r.setV_nuevo(dc_Consumo_datos.getString(4));
-                dc_consumo_r.setHora(dc_Consumo_datos.getString(5));
-                dc_consumo_listaA.add(dc_consumo_r);
+                dc_consumo_r.setHora(dc_Consumo_datos.getString(2));
+                dc_consumo_r.setV_viejo(dc_Consumo_datos.getString(4));
+                dc_consumo_r.setV_nuevo(dc_Consumo_datos.getString(5));
+                dc_consumo_listas.add(dc_consumo_r);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -178,5 +211,12 @@ public class ConsultarReservas extends ActionSupport implements ModelDriven<Rese
     public void setStyle(String style) {
         this.style = style;
     }
+
+    public List<Auditoria> getDc_consumo_listas() {
+        return dc_consumo_listas;
+    }
+    
+    
+    
 
 }

@@ -374,7 +374,7 @@ create or replace procedure ver_auditoria(dc_oracle_cursor out sys_refcursor)
 is
 begin
   open dc_oracle_cursor for select usuario, to_char(fecha,'dd/MM/yyyy'),to_char(fecha,'hh:mm:ss'), v_viejo,v_nuevo
-  from auditoria;
+  from auditoria order by fecha asc;
 end;
 /
 show errors procedure ver_auditoria;
